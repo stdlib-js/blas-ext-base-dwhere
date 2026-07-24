@@ -41,32 +41,38 @@ limitations under the License.
 
 <!-- /.intro -->
 
-<section class="installation">
 
-## Installation
-
-```bash
-npm install @stdlib/blas-ext-base-dwhere
-```
-
-Alternatively,
-
--   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm`][esm-url] branch (see [README][esm-readme]).
--   If you are using Deno, visit the [`deno`][deno-url] branch (see [README][deno-readme] for usage intructions).
--   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd`][umd-url] branch (see [README][umd-readme]).
-
-The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
-
-To view installation and usage instructions specific to each branch build, be sure to explicitly navigate to the respective README files on each branch, as linked to above.
-
-</section>
 
 <section class="usage">
 
 ## Usage
 
+To use in Observable,
+
 ```javascript
-var dwhere = require( '@stdlib/blas-ext-base-dwhere' );
+dwhere = require( 'https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-dwhere@umd/browser.js' )
+```
+
+To vendor stdlib functionality and avoid installing dependency trees for Node.js, you can use the UMD server build:
+
+```javascript
+var dwhere = require( 'path/to/vendor/umd/blas-ext-base-dwhere/index.js' )
+```
+
+To include the bundle in a webpage,
+
+```html
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-dwhere@umd/browser.js"></script>
+```
+
+If no recognized module system is present, access bundle contents via the global scope:
+
+```html
+<script type="text/javascript">
+(function () {
+    window.dwhere;
+})();
+</script>
 ```
 
 #### dwhere( N, condition, strideC, x, strideX, y, strideY, out, strideOut )
@@ -200,12 +206,17 @@ dwhere.ndarray( 3, condition, 2, 1, x, 2, 1, y, 2, 1, out, 1, 0 );
 
 <!-- eslint no-undef: "error" -->
 
-```javascript
-var bernoulli = require( '@stdlib/random-array-bernoulli' );
-var uniform = require( '@stdlib/random-array-uniform' );
-var BooleanArray = require( '@stdlib/array-bool' );
-var Float64Array = require( '@stdlib/array-float64' );
-var dwhere = require( '@stdlib/blas-ext-base-dwhere' );
+```html
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/random-array-bernoulli@umd/browser.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/random-array-uniform@umd/browser.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/array-bool@umd/browser.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/array-float64@umd/browser.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/stdlib-js/blas-ext-base-dwhere@umd/browser.js"></script>
+<script type="text/javascript">
+(function () {
 
 var cbuf = bernoulli( 20, 0.5, {
     'dtype': 'uint8'
@@ -228,6 +239,11 @@ console.log( out );
 
 dwhere( condition.length, condition, 1, x, 1, y, 1, out, 1 );
 console.log( out );
+
+})();
+</script>
+</body>
+</html>
 ```
 
 </section>
@@ -236,160 +252,7 @@ console.log( out );
 
 <!-- C interface documentation. -->
 
-* * *
 
-<section class="c">
-
-## C APIs
-
-<!-- Section to include introductory text. Make sure to keep an empty line after the intro `section` element and another before the `/section` close. -->
-
-<section class="intro">
-
-</section>
-
-<!-- /.intro -->
-
-<!-- C usage documentation. -->
-
-<section class="usage">
-
-### Usage
-
-```c
-#include "stdlib/blas/ext/base/dwhere.h"
-```
-
-<!-- lint disable maximum-heading-length -->
-
-#### stdlib_strided_dwhere( N, \*Condition, strideC, \*X, strideX, \*Y, strideY, \*Out, strideOut )
-
-<!-- lint enable maximum-heading-length -->
-
-Takes elements from one of two double-precision floating-point strided arrays depending on a condition.
-
-```c
-#include <stdbool.h>
-
-const bool condition[] = { true, false, true };
-const double x[] = { 1.0, 2.0, 3.0 };
-const double y[] = { 4.0, 5.0, 6.0 };
-double out[] = { 0.0, 0.0, 0.0 };
-
-stdlib_strided_dwhere( 3, condition, 1, x, 1, y, 1, out, 1 );
-```
-
-The function accepts the following arguments:
-
--   **N**: `[in] CBLAS_INT` number of indexed elements.
--   **Condition**: `[in] bool*` condition array.
--   **strideC**: `[in] CBLAS_INT` stride length for `Condition`.
--   **X**: `[in] double*` first input array.
--   **strideX**: `[in] CBLAS_INT` stride length for `X`.
--   **Y**: `[in] double*` second input array.
--   **strideY**: `[in] CBLAS_INT` stride length for `Y`.
--   **Out**: `[out] double*` output array.
--   **strideOut**: `[in] CBLAS_INT` stride length for `Out`.
-
-```c
-void stdlib_strided_dwhere( const CBLAS_INT N, const bool *Condition, const CBLAS_INT strideC, const double *X, const CBLAS_INT strideX, const double *Y, const CBLAS_INT strideY, double *Out, const CBLAS_INT strideOut );
-```
-
-<!-- lint disable maximum-heading-length -->
-
-#### stdlib_strided_dwhere_ndarray( N, \*Condition, strideC, offsetC, \*X, strideX, offsetX, \*Y, strideY, offsetY, \*Out, strideOut, offsetOut )
-
-<!-- lint enable maximum-heading-length -->
-
-Takes elements from one of two double-precision floating-point strided arrays depending on a condition using alternative indexing semantics.
-
-```c
-#include <stdbool.h>
-
-const bool condition[] = { true, false, true };
-const double x[] = { 1.0, 2.0, 3.0 };
-const double y[] = { 4.0, 5.0, 6.0 };
-double out[] = { 0.0, 0.0, 0.0 };
-
-stdlib_strided_dwhere_ndarray( 3, condition, 1, 0, x, 1, 0, y, 1, 0, out, 1, 0 );
-```
-
-The function accepts the following arguments:
-
--   **N**: `[in] CBLAS_INT` number of indexed elements.
--   **Condition**: `[in] bool*` condition array.
--   **strideC**: `[in] CBLAS_INT` stride length for `Condition`.
--   **offsetC**: `[in] CBLAS_INT` starting index for `Condition`.
--   **X**: `[in] double*` first input array.
--   **strideX**: `[in] CBLAS_INT` stride length for `X`.
--   **offsetX**: `[in] CBLAS_INT` starting index for `X`.
--   **Y**: `[in] double*` second input array.
--   **strideY**: `[in] CBLAS_INT` stride length for `Y`.
--   **offsetY**: `[in] CBLAS_INT` starting index for `Y`.
--   **Out**: `[out] double*` output array.
--   **strideOut**: `[in] CBLAS_INT` stride length for `Out`.
--   **offsetOut**: `[in] CBLAS_INT` starting index for `Out`.
-
-```c
-void stdlib_strided_dwhere_ndarray( const CBLAS_INT N, const bool *Condition, const CBLAS_INT strideC, const CBLAS_INT offsetC, const double *X, const CBLAS_INT strideX, const CBLAS_INT offsetX, const double *Y, const CBLAS_INT strideY, const CBLAS_INT offsetY, double *Out, const CBLAS_INT strideOut, const CBLAS_INT offsetOut );
-```
-
-</section>
-
-<!-- /.usage -->
-
-<!-- C API usage notes. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
-
-<section class="notes">
-
-</section>
-
-<!-- /.notes -->
-
-<!-- C API usage examples. -->
-
-<section class="examples">
-
-### Examples
-
-```c
-#include "stdlib/blas/ext/base/dwhere.h"
-#include <stdio.h>
-#include <stdbool.h>
-
-int main( void ) {
-    // Create strided arrays:
-    const bool condition[] = { true, false, true, false, true };
-    const double x[] = { 1.0, 2.0, 3.0, 4.0, 5.0 };
-    const double y[] = { 6.0, 7.0, 8.0, 9.0, 10.0 };
-    double out[] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
-
-    // Specify the number of indexed elements:
-    const int N = 5;
-
-    // Specify stride lengths:
-    const int strideC = 1;
-    const int strideX = 1;
-    const int strideY = 1;
-    const int strideOut = 1;
-
-    // Select from `x` or `y` based on the condition array:
-    stdlib_strided_dwhere( N, condition, strideC, x, strideX, y, strideY, out, strideOut );
-
-    // Print the result:
-    for ( int i = 0; i < N; i++ ) {
-        printf( "out[ %i ] = %lf\n", i, out[ i ] );
-    }
-}
-```
-
-</section>
-
-<!-- /.examples -->
-
-</section>
-
-<!-- /.c -->
 
 <!-- Section for related `stdlib` packages. Do not manually edit this section, as it is automatically populated. -->
 
@@ -471,9 +334,9 @@ Copyright &copy; 2016-2026. The Stdlib [Authors][stdlib-authors].
 
 [stdlib-license]: https://raw.githubusercontent.com/stdlib-js/blas-ext-base-dwhere/main/LICENSE
 
-[@stdlib/array/bool]: https://github.com/stdlib-js/array-bool
+[@stdlib/array/bool]: https://github.com/stdlib-js/array-bool/tree/umd
 
-[@stdlib/array/float64]: https://github.com/stdlib-js/array-float64
+[@stdlib/array/float64]: https://github.com/stdlib-js/array-float64/tree/umd
 
 [mdn-typed-array]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
 
